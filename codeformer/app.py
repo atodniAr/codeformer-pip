@@ -12,7 +12,7 @@ from codeformer.basicsr.utils.registry import ARCH_REGISTRY
 from codeformer.facelib.utils.face_restoration_helper import FaceRestoreHelper
 from codeformer.facelib.utils.misc import is_gray
 
-from PIL.Image import Image
+from PIL.Image import Image, fromarray
 from typing import Literal
 
 pretrain_model_url = {
@@ -93,17 +93,21 @@ def inference_app(
     face_upsample: bool = True,
     upscale: Literal[1, 2, 4] = 2,
     codeformer_fidelity: float = 0.75,
+    has_aligned: bool = False,  # the input faces are already cropped and aligned
+    only_center_face: bool = False,
+    draw_box: bool = False,  # draw face box on the output image
+    detection_model: Literal["retinaface_resnet50", "dlib"] = "retinaface_resnet50",
 ):
     # take the default setting for the demo
-    has_aligned = False
-    only_center_face = False
-    draw_box = False
-    detection_model = "retinaface_resnet50"
-    print("Inp:", type(image), background_enhance, face_upsample, upscale, codeformer_fidelity)
     if isinstance(image, str):
         img = cv2.imread(str(image), cv2.IMREAD_COLOR)
-    if isinstance(image, np.ndarray):
+    elif isinstance(image, np.ndarray):
         img = image
+    elif isinstance(image, Image):
+        img = np.array(image)
+    else:
+        raise ValueError(f"Unknown input type: {type(image)}")
+
     print("\timage size:", img.shape)
 
     upscale = int(upscale)  # convert type to int
@@ -184,4 +188,5 @@ def inference_app(
         else:
             restored_img = face_helper.paste_faces_to_input_image(upsample_img=bg_img, draw_box=draw_box)
 
-    return restored_img
+    # Return PIL image
+    return fromarray(cv2.cvtColor(restored_img, cv2.COLOR_BGR2RGB))
