@@ -104,7 +104,10 @@ def inference_app(
     elif isinstance(image, np.ndarray):
         img = image
     elif isinstance(image, Image):
+        # convert PIL image to numpy array
         img = np.array(image)
+        # convert RGB to BGR
+        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
     else:
         raise ValueError(f"Unknown input type: {type(image)}")
 
