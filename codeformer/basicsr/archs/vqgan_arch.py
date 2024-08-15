@@ -3,6 +3,7 @@ VQGAN code, adapted from the original created by the Unleashing Transformers aut
 https://github.com/samb-t/unleashing-transformers/blob/master/models/vqgan.py
 
 """
+
 import copy
 
 import numpy as np
@@ -40,8 +41,8 @@ class VectorQuantizer(nn.Module):
 
         # distances from z to embeddings e_j (z - e)^2 = z^2 + e^2 - 2 e * z
         d = (
-            (z_flattened ** 2).sum(dim=1, keepdim=True)
-            + (self.embedding.weight ** 2).sum(1)
+            (z_flattened**2).sum(dim=1, keepdim=True)
+            + (self.embedding.weight**2).sum(1)
             - 2 * torch.matmul(z_flattened, self.embedding.weight.t())
         )
 
@@ -386,7 +387,7 @@ class VQGANDiscriminator(nn.Module):
         ndf_mult_prev = 1
         for n in range(1, n_layers):  # gradually increase the number of filters
             ndf_mult_prev = ndf_mult
-            ndf_mult = min(2 ** n, 8)
+            ndf_mult = min(2**n, 8)
             layers += [
                 nn.Conv2d(ndf * ndf_mult_prev, ndf * ndf_mult, kernel_size=4, stride=2, padding=1, bias=False),
                 nn.BatchNorm2d(ndf * ndf_mult),
@@ -394,7 +395,7 @@ class VQGANDiscriminator(nn.Module):
             ]
 
         ndf_mult_prev = ndf_mult
-        ndf_mult = min(2 ** n_layers, 8)
+        ndf_mult = min(2**n_layers, 8)
 
         layers += [
             nn.Conv2d(ndf * ndf_mult_prev, ndf * ndf_mult, kernel_size=4, stride=1, padding=1, bias=False),

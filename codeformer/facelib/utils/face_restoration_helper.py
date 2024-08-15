@@ -462,7 +462,7 @@ class FaceRestoreHelper(object):
                 inv_mask_border = cv2.warpAffine(mask_border, inverse_affine, (w_up, h_up))
                 inv_mask_borders.append(inv_mask_border)
             # compute the fusion edge based on the area of face
-            w_edge = int(total_face_area ** 0.5) // 20
+            w_edge = int(total_face_area**0.5) // 20
             erosion_radius = w_edge * 2
             inv_mask_center = cv2.erode(inv_mask_erosion, np.ones((erosion_radius, erosion_radius), np.uint8))
             blur_size = w_edge * 2

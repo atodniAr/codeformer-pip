@@ -168,7 +168,7 @@ class LmdbMaker:
         compress_level (int): Compress level when encoding images. Default: 1.
     """
 
-    def __init__(self, lmdb_path, map_size=1024 ** 4, batch=5000, compress_level=1):
+    def __init__(self, lmdb_path, map_size=1024**4, batch=5000, compress_level=1):
         if not lmdb_path.endswith(".lmdb"):
             raise ValueError("lmdb_path must end with '.lmdb'.")
         if osp.exists(lmdb_path):

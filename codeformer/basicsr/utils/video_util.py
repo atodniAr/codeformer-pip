@@ -3,6 +3,7 @@ The code is modified from the Real-ESRGAN:
 https://github.com/xinntao/Real-ESRGAN/blob/master/inference_realesrgan_video.py
 
 """
+
 import sys
 
 import cv2

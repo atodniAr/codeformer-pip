@@ -12,6 +12,9 @@ from codeformer.basicsr.utils.registry import ARCH_REGISTRY
 from codeformer.facelib.utils.face_restoration_helper import FaceRestoreHelper
 from codeformer.facelib.utils.misc import is_gray
 
+from PIL.Image import Image
+from typing import Literal
+
 pretrain_model_url = {
     "codeformer": "https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth",
     "detection": "https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/detection_Resnet50_Final.pth",
@@ -84,7 +87,13 @@ codeformer_net.eval()
 os.makedirs("output", exist_ok=True)
 
 
-def inference_app(image, background_enhance, face_upsample, upscale, codeformer_fidelity):
+def inference_app(
+    image: str | np.ndarray | Image,
+    background_enhance: bool = True,
+    face_upsample: bool = True,
+    upscale: Literal[1, 2, 4] = 2,
+    codeformer_fidelity: float = 0.75,
+):
     # take the default setting for the demo
     has_aligned = False
     only_center_face = False
@@ -174,5 +183,5 @@ def inference_app(image, background_enhance, face_upsample, upscale, codeformer_
             )
         else:
             restored_img = face_helper.paste_faces_to_input_image(upsample_img=bg_img, draw_box=draw_box)
-            
+
     return restored_img
